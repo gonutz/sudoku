@@ -99,6 +99,78 @@ func TestSolveValidPuzzle(t *testing.T) {
 	})
 }
 
+func TestSolutionCountCanBeCalculated(t *testing.T) {
+	if !HasUniqueSolution(Game{
+		1, 2, 3, 4, 5, 6, 7, 8, 9,
+		7, 8, 9, 1, 2, 3, 4, 5, 6,
+		4, 5, 6, 7, 8, 9, 1, 2, 3,
+		2, 3, 4, 5, 6, 7, 8, 9, 1,
+		8, 9, 1, 2, 3, 4, 5, 6, 7,
+		5, 6, 7, 8, 9, 1, 2, 3, 4,
+		3, 4, 5, 6, 7, 8, 9, 1, 2,
+		9, 1, 2, 3, 4, 5, 6, 7, 8,
+		6, 7, 8, 9, 1, 2, 3, 4, 5,
+	}) {
+		t.Error("finished game has 1 solution")
+	}
+
+	if !HasUniqueSolution(Game{
+		1, 2, 3, 4, 5, 6, 7, 8, 9,
+		7, 8, 9, 1, 2, 3, 4, 5, 6,
+		4, 5, 6, 7, 8, 9, 1, 2, 3,
+		2, 3, 4, 5, 6, 7, 0, 9, 1,
+		8, 9, 1, 2, 3, 4, 5, 6, 7,
+		5, 6, 7, 8, 9, 1, 2, 3, 4,
+		3, 4, 5, 6, 7, 8, 9, 1, 2,
+		9, 1, 2, 3, 4, 5, 6, 7, 8,
+		6, 7, 8, 9, 1, 2, 3, 4, 5,
+	}) {
+		t.Error("game with only one missing number has unique solution")
+	}
+
+	if HasUniqueSolution(Game{
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+	}) {
+		t.Error("empty game has multiple solutions")
+	}
+
+	if HasUniqueSolution(Game{
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 10, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+	}) {
+		t.Error("invalid numbers in game means no solution")
+	}
+
+	if HasUniqueSolution(Game{
+		1, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 1, 1, 0, 0, 0, 0, 0, 0,
+		0, 0, 1, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+	}) {
+		t.Error("invalid game has no solution")
+	}
+}
+
 func checkInt(t *testing.T, have, want int) {
 	if have != want {
 		t.Errorf("want %v but have %v", want, have)

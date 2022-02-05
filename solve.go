@@ -56,7 +56,7 @@ func Solve(g Game) (Game, error) {
 		return g, errors.New("illegal input, conflicting fixed values")
 	}
 
-	if solve(&g) {
+	if solveUp(&g) {
 		return g, nil
 	} else {
 		return g, errors.New("unsolvable game")
@@ -77,8 +77,9 @@ func validGame(g Game) bool {
 	return true
 }
 
-// solve returns true if a solution was found.
-func solve(g *Game) bool {
+// solveUp returns true if a solution was found.
+// It tries number 1 to 9, in increasing order.
+func solveUp(g *Game) bool {
 	solvedAlready := true
 	for i, n := range g {
 		if n == 0 {
@@ -86,7 +87,29 @@ func solve(g *Game) bool {
 			for try := 1; try <= 9; try++ {
 				if validAt(g, try, i) {
 					g[i] = try
-					if solve(g) {
+					if solveUp(g) {
+						return true
+					}
+				}
+			}
+			g[i] = 0
+			break
+		}
+	}
+	return solvedAlready
+}
+
+// solveDown returns true if a solution was found.
+// It tries number 9 to 1, in decreasing order.
+func solveDown(g *Game) bool {
+	solvedAlready := true
+	for i, n := range g {
+		if n == 0 {
+			solvedAlready = false
+			for try := 9; try >= 1; try-- {
+				if validAt(g, try, i) {
+					g[i] = try
+					if solveDown(g) {
 						return true
 					}
 				}
@@ -104,7 +127,8 @@ func validAt(g *Game, n, at int) bool {
 	col := colAt(at)
 	block := blockAt(at)
 	for i := range g {
-		if g[i] == n && (row == rowAt(i) || col == colAt(i) || block == blockAt(i)) {
+		if g[i] == n &&
+			(row == rowAt(i) || col == colAt(i) || block == blockAt(i)) {
 			return false
 		}
 	}
@@ -114,3 +138,21 @@ func validAt(g *Game, n, at int) bool {
 func rowAt(i int) int   { return i / 9 }
 func colAt(i int) int   { return i % 9 }
 func blockAt(i int) int { return (rowAt(i)/3)*3 + colAt(i)/3 }
+
+// HasUniqueSolution returns true if the given game has exactly one solution. If
+// there is an error in the game (invalid numbers, illegal input or unsolvable
+// game) it also returns false.
+func HasUniqueSolution(g Game) bool {
+	for _, n := range g {
+		if !(0 <= n && n <= 9) {
+			return false
+		}
+	}
+	if !validGame(g) {
+		return false
+	}
+	up, down := g, g
+	upOK := solveUp(&up)
+	downOK := solveDown(&down)
+	return upOK && downOK && up == down
+}
