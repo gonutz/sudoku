@@ -171,6 +171,34 @@ func TestSolutionCountCanBeCalculated(t *testing.T) {
 	}
 }
 
+func TestStringRepresentation(t *testing.T) {
+	have := Game{
+		1, 2, 3, 4, 5, 6, 7, 8, 9,
+		4, 5, 6, 7, 8, 9, 1, 2, 3,
+		7, 8, 9, 1, 2, 3, 4, 5, 6,
+		2, 3, 4, 5, 6, 7, 8, 9, 1,
+		5, 6, 7, 8, 9, 1, 2, 3, 4,
+		8, 9, 1, 2, 3, 4, 5, 6, 7,
+		3, 4, 5, 6, 7, 8, 9, 1, 2,
+		6, 7, 8, 9, 1, 2, 3, 4, 5,
+		9, 1, 2, 3, 4, 5, 6, 7, 8,
+	}.String()
+	want := `123 456 789
+456 789 123
+789 123 456
+
+234 567 891
+567 891 234
+891 234 567
+
+345 678 912
+678 912 345
+912 345 678`
+	if have != want {
+		t.Errorf("want:\n%s\nbut have:\n%s", want, have)
+	}
+}
+
 func checkInt(t *testing.T, have, want int) {
 	if have != want {
 		t.Errorf("want %v but have %v", want, have)

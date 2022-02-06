@@ -10,16 +10,30 @@ import (
 // Values of 0 will be solved for.
 type Game [9 * 9]int
 
+// String prints the game as a grid separated by spaces and line breaks, e.g.:
+// 	123 456 789
+// 	456 789 123
+// 	789 123 456
+//
+// 	234 567 891
+// 	567 891 234
+// 	891 234 567
+//
+// 	345 678 912
+// 	678 912 345
+// 	912 345 678
 func (g Game) String() string {
 	s := ""
 	for i, n := range g {
-		if i%3 == 0 {
+		s += strconv.Itoa(n)
+		if i%3 == 2 && i%9 != 8 {
 			s += " "
 		}
-		s += strconv.Itoa(n)
-		if (i+1)%9 == 0 {
-			s += "\n"
-			if (i+1)%(3*9) == 0 {
+		if i != 80 {
+			if i%9 == 8 {
+				s += "\n"
+			}
+			if i%27 == 26 {
 				s += "\n"
 			}
 		}
