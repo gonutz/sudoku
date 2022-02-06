@@ -167,6 +167,9 @@ func HasUniqueSolution(g Game) bool {
 	}
 	up, down := g, g
 	upOK := solveUp(&up)
+	if !upOK {
+		return false
+	}
 	downOK := solveDown(&down)
 	return upOK && downOK && up == down
 }
